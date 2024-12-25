@@ -1,0 +1,4 @@
+logger:
+  level: "DEBUG"
+session:
+    token_expiry_sec: 86400 # 24hr
