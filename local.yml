@@ -1,4 +1,7 @@
+# https://heroiclabs.com/docs/nakama/getting-started/configuration/
+
 logger:
   level: "DEBUG"
 session:
+    # Session token expiry in seconds. Default value is 60.
     token_expiry_sec: 86400 # 24hr
