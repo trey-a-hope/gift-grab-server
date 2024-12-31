@@ -23,6 +23,12 @@ services:
   nakama:
     build: .
     container_name: template_nk_backend
+    # NEW -->
+    environment:
+      - NAKAMA_CORS_ALLOWED_ORIGINS=* # Allow all origins
+      - NAKAMA_CORS_ALLOWED_METHODS=GET,POST,PUT,DELETE,OPTIONS # Allow specific methods
+      - NAKAMA_CORS_ALLOWED_HEADERS=Content-Type,Authorization # Allow specific headers
+    # ------>
     depends_on:
       - postgres
     entrypoint:
