@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"time"
 
 	"github.com/heroiclabs/nakama-common/runtime"
@@ -32,6 +33,11 @@ func InitModule(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runti
 		return err
 	}
 
+	if err := initializer.RegisterRpc("notification_send", NotificationSend); err != nil {
+		logger.Error("Unable to register: %v", err)
+		return err
+	}
+
 	logger.Info("Module loaded in %dms", time.Since(initStart).Milliseconds())
 	return nil
 }
@@ -44,5 +50,48 @@ func AccountDeleteId(ctx context.Context, logger runtime.Logger, db *sql.DB, nk 
 		logger.Error("Unable to delete account: %v", err)
 		return "error", err
 	}
+	return "success", nil
+}
+
+// Send a notification.
+func NotificationSend(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+	logger.Info("Received payload: %v", payload)
+
+	// First unmarshal into a RawMessage
+	var raw json.RawMessage
+	if err := json.Unmarshal([]byte(payload), &raw); err != nil {
+		logger.Error("Failed first unmarshal: %v", err)
+		return "", err
+	}
+	logger.Info("Received payload: %v", raw)
+
+	// Then unmarshal the RawMessage into our map
+	var payloadMap map[string]interface{}
+	if err := json.Unmarshal(raw, &payloadMap); err != nil {
+		logger.Error("Failed second unmarshal: %v", err)
+		return "", err
+	}
+	logger.Info("Received payload: %v", payloadMap)
+
+	subject := payloadMap["subject"].(string)
+	logger.Info("Subject: %v", subject)
+
+	// Get userID from context or use a default
+	userID, _ := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
+	if userID == "" {
+		userID = "default_user_id" // You might want to handle this differently
+	}
+
+	// Create the notification content
+	content := map[string]interface{}{
+		"message": subject,
+	}
+
+	// Send the notification with all required parameters
+	if err := nk.NotificationSend(ctx, userID, subject, content, 1, "", true); err != nil {
+		logger.Error("Failed to send notification: %v", err)
+		return "", err
+	}
+
 	return "success", nil
 }
