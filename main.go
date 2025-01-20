@@ -75,12 +75,13 @@ func NotificationSend(ctx context.Context, logger runtime.Logger, db *sql.DB, nk
 	content := map[string]interface{}{
 		"message": subject,
 	}
-	let code = 1;
-	let senderId = "" 
-	let persistent = true;
+
+	code := 1
+	senderID := ""  
+	persistent := true
 
 	// Send the notification with all required parameters
- 	if err := nk.NotificationSend(ctx, userID, subject, content, code, senderId, persistent); 
+ 	if err := nk.NotificationSend(ctx, userID, subject, content, code, senderID, persistent); 
 	err != nil {
 		logger.Error("Failed to send notification: %v", err)
 		return "", err
