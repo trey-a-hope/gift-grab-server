@@ -27,6 +27,29 @@ func InitModule(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runti
 		logger.Error("error creating leaderboard")
 	}
 
+	// Tournament information.
+	// tournament_id := uuid.Must(uuid.NewV4())
+	tournament_id := "tournament"
+	tournament_authoritative := false        // true by default
+	tournament_sortOrder := "desc"           // one of: "desc", "asc"
+	tournament_operator := "best"            // one of: "best", "set", "incr"
+	tournament_resetSchedule := "0 12 * * *" // noon UTC each day
+	tournament_metadata := map[string]interface{}{}
+	tournament_title := "Daily Dash"
+	tournament_description := "Dash past your opponents for high scores and big rewards!"
+	tournament_category := 1
+	tournament_startTime := int(time.Now().UTC().Unix()) // start now
+	tournament_endTime := 0                              // never end, repeat the tournament each day forever
+	tournament_duration := 3600                          // in seconds
+	tournament_maxSize := 10000                          // first 10,000 players who join
+	tournament_maxNumScore := 3                          // each player can have 3 attempts to score
+	tournament_joinRequired := true
+
+	// Create leaderboard.
+	if err := nk.TournamentCreate(ctx, tournament_id, tournament_authoritative, tournament_sortOrder, tournament_operator, tournament_resetSchedule, tournament_metadata, tournament_title, tournament_description, tournament_category, tournament_startTime, tournament_endTime, tournament_duration, tournament_maxSize, tournament_maxNumScore, tournament_joinRequired); err != nil {
+		logger.Error("error creating tournament")
+	}
+
 	// Register RPC functions.
 	if err := initializer.RegisterRpc("account_delete_id", AccountDeleteId); err != nil {
 		logger.Error("Unable to register: %v", err)
