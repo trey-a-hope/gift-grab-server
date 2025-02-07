@@ -13,7 +13,7 @@ const (
 	TournamentAuthoritative = false
 	TournamentSortOrder     = "desc"
 	TournamentOperator      = "best"
-	TournamentResetSchedule = "0 12 * * *" // Noon UTC each day
+	TournamentResetSchedule = "0 9 * * *" // Noon UTC each day (-3 extra hours for Colombia time zone to be "noon")
 	TournamentTitle         = "Daily Dash"
 	TournamentDescription   = "Dash past your opponents for high scores and big rewards!"
 	TournamentCategory      = 1
