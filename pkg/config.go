@@ -1,6 +1,8 @@
 package config
 
 const (
+	hour = 3600
+
 	// Leaderboard configs
 	LeaderboardID            = "monthly_leaderboard"
 	LeaderboardAuthoritative = false
@@ -17,7 +19,7 @@ const (
 	TournamentTitle         = "Daily Dash"
 	TournamentDescription   = "Dash past your opponents for high scores and big rewards!"
 	TournamentCategory      = 1
-	TournamentDuration      = 3600 // 1 hour in seconds
+	TournamentDuration      = hour * 23 // 23 hrs
 	TournamentMaxSize       = 10000
 	TournamentMaxAttempts   = 3
 	TournamentJoinRequired  = false

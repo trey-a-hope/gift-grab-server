@@ -37,5 +37,9 @@ func registerRPCs(initializer runtime.Initializer, logger runtime.Logger, db *sq
 		return err
 	}
 
+	if err := initializer.RegisterTournamentEnd(leaderboard.DistributeRewards); err != nil {
+		return err
+	}
+
 	return nil
 }
