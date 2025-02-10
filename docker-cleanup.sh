@@ -1,9 +1,13 @@
 #!/bin/bash
-# to run - ./docker-cleanup.sh
 
 # Stop all containers and remove volumes
-echo "Stopping containers and removing volumes..."
-docker compose down -v
+if [ "$1" == "-v" ]; then
+    echo "Stopping containers and removing volumes..."
+    docker compose down -v
+else
+    echo "Stopping containers..."
+    docker compose down
+fi
 
 # Remove all images
 echo "Removing all Docker images..."
