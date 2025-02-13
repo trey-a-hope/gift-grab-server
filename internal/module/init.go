@@ -38,6 +38,7 @@ func registerRPCs(initializer runtime.Initializer, logger runtime.Logger, db *sq
 	}
 
 	if err := initializer.RegisterTournamentEnd(leaderboard.DistributeRewards); err != nil {
+		logger.Error("Unable to register: %v", err)
 		return err
 	}
 
