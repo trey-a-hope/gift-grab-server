@@ -5,4 +5,7 @@ session:
     refresh_token_expiry_sec: 86400   # Refresh token expires in 24 hours
 social:
   apple:
-    bundle_id: "com.example.giftGrab" # For Apple Sign In.
+    bundle_id: "com.example.giftGrab" # For Apple Sign In
+console:
+  username: "treycodes"               # Username for console login
+  password: "giftgrab"                # Password for console login
