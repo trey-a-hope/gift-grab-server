@@ -1,5 +1,3 @@
-# ./docker-cleanup.sh
-
 # Stop all containers and remove volumes
 if [ "$1" == "-v" ]; then
     echo "Stopping containers and removing volumes..."
