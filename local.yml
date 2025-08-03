@@ -3,3 +3,9 @@ logger:
 console:
   username: "treycodes"               # Username for console login
   password: "giftgrab"                # Password for console login
+session:
+  token_expiry_sec: 3600
+  refresh_token_expiry_sec: 86400
+social:
+  apple:
+    bundle_id: "com.example.giftGrab"
