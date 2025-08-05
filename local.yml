@@ -1,5 +1,5 @@
 logger:
   level: "DEBUG"
 console:
-  username: "treycodes"               # Username for console login
-  password: "giftgrab"                # Password for console login
+  username: "treycodes"             
+  password: "giftgrab"               
