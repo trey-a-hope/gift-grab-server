@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"gift-grab-server/controllers/account"
+	"gift-grab-server/controllers/leaderboard"
 	"time"
 
 	"github.com/heroiclabs/nakama-common/runtime"
@@ -15,6 +16,10 @@ func InitModule(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runti
 	initStart := time.Now()
 
 	if err := registerRPCS(initializer, logger); err != nil {
+		return err
+	}
+
+	if err := leaderboard.CreateMonthlyLeaderboard(ctx, nk, logger); err != nil {
 		return err
 	}
 
