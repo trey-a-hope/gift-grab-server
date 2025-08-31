@@ -4,7 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"gift-grab-server/controllers/account"
+	"gift-grab-server/controllers/friend"
 	"gift-grab-server/controllers/leaderboard"
+
 	"time"
 
 	"github.com/heroiclabs/nakama-common/runtime"
@@ -29,6 +31,11 @@ func InitModule(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runti
 
 func registerRPCS(initializer runtime.Initializer, logger runtime.Logger) error {
 	if err := initializer.RegisterRpc("account_delete_id", account.DeleteId); err != nil {
+		logger.Error("Unable to register: %v", err)
+		return err
+	}
+
+	if err := initializer.RegisterRpc("get_friend_state", friend.GetFriendState); err != nil {
 		logger.Error("Unable to register: %v", err)
 		return err
 	}
