@@ -10,16 +10,11 @@ import (
 	"github.com/heroiclabs/nakama-common/runtime"
 )
 
-//	{
-//	    "user_b": "b316d7c3-40d1-4a00-84b6-86a46acfcf8d"
-//	}
-
 func GetFriendState(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
-	userID, _ := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
+	source_id, _ := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 
-	// Parse the JSON payload
 	var request struct {
-		UserB string `json:"user_b"`
+		DestinationId string `json:"destination_id"`
 	}
 
 	if err := json.Unmarshal([]byte(payload), &request); err != nil {
@@ -27,27 +22,25 @@ func GetFriendState(ctx context.Context, logger runtime.Logger, db *sql.DB, nk r
 		return "", errors.New("invalid JSON payload")
 	}
 
-	userIDToBeChecked := request.UserB
+	destination_id := request.DestinationId
 
-	// Basic validation
-	if userIDToBeChecked == "" {
-		return "", errors.New("user_b cannot be empty")
+	if destination_id == "" {
+		return "", errors.New("destination_id cannot be empty")
 	}
 
-	// Use QueryRow to get the result
 	query := `
 		SELECT state
 		FROM user_edge
-		WHERE (destination_id = $1 AND source_id = $2)
+		WHERE (destination_id = $2 AND source_id = $1)
 		LIMIT 1`
 
 	var state int
 
-	err := db.QueryRow(query, userID, userIDToBeChecked).Scan(&state)
+	err := db.QueryRow(query, source_id, destination_id).Scan(&state)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return "-1", nil // Not friends - return -1
+			return "-1", nil
 		}
 		logger.Error("Database query error: %v", err)
 		return "", err
